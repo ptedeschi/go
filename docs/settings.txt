@@ -1,0 +1,17 @@
+App Service plan
+App Service
+SQL server
+
+
+> go_resource_group (East US)
+>> go-sql-server (East US)
+>>> patrick.tedeschi
+>>> ick0ted@
+>>>> go-sql-database - Basic
+
+>> go-app-service-plan (East US) - F1 Free
+>>> go-web-app
+
+Server=tcp:go-sql-server.database.windows.net,1433;Initial Catalog=go-sql-database;Persist Security Info=False;User ID=patrick.tedeschi;Password=ick0ted@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+
+http://localhost:49287/api/values/byName?lat=-22.8498085&lng=-47.085443

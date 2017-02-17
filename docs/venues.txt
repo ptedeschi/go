@@ -1,0 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace go.Models
+{
+    public class Venues
+    {
+        public int id { get; set; }
+        public String name { get; set; }
+        public String address { get; set; }
+        public String city { get; set; }
+        public String state { get; set; }
+        public String country { get; set; }
+        public float lat { get; set; }
+        public float lng { get; set; }
+    }
+}
