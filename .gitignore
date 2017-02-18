@@ -279,11 +279,11 @@ __pycache__/
 
 # Android
 *.iml
-.gradle
+/source/android/DiapersGo/.gradle
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
-/build
+/source/android/DiapersGo/build
 /captures
 .externalNativeBuild

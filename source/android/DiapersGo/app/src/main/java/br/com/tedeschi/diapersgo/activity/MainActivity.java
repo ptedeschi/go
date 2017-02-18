@@ -1,8 +1,12 @@
-package br.com.tedeschi.diapersgo;
+package br.com.tedeschi.diapersgo.activity;
 
+import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,8 +17,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
+import br.com.tedeschi.diapersgo.R;
+import br.com.tedeschi.diapersgo.adapter.DealsAdapter;
+import br.com.tedeschi.diapersgo.model.Deal;
+import br.com.tedeschi.diapersgo.model.Deals;
+import br.com.tedeschi.diapersgo.rest.ApiClient;
+import br.com.tedeschi.diapersgo.rest.ApiInterface;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +58,27 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.deals_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<Deals> call = apiService.getTopRatedMovies(-22.8498085, -47.085443);
+        call.enqueue(new Callback<Deals>() {
+            @Override
+            public void onResponse(Call<Deals>call, Response<Deals> response) {
+                List<Deal> deals = response.body().getDeals();
+                recyclerView.setAdapter(new DealsAdapter(deals, R.layout.list_item_deal, getApplicationContext()));
+            }
+
+            @Override
+            public void onFailure(Call<Deals>call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, "onFailure: " + t.toString());
+            }
+        });
     }
 
     @Override
