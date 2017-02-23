@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_deal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="br.com.tedeschi.diapersgo.activity.AddDealActivity"
+    tools:theme="@style/AppTheme">
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/editText"
+        android:layout_margin="5dp"/>
+
+    <Spinner
+        android:id="@+id/spinner_diaper_brand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/diaper_brand_array"
+        android:prompt="@string/diaper_brand_prompt"
+        android:spinnerMode="dialog"
+        android:layout_margin="5dp"/>
+
+    <Spinner
+        android:id="@+id/spinner_diaper_model"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:prompt="@string/diaper_model_prompt"
+        android:spinnerMode="dialog"
+        android:layout_margin="5dp"/>
+
+    <Spinner
+        android:id="@+id/spinner_diaper_size"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/diaper_size_array"
+        android:prompt="@string/diaper_size_prompt"
+        android:spinnerMode="dialog"
+        android:layout_margin="5dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:ems="10"
+        android:id="@+id/editText2"
+        android:hint="Add number of diapers" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/editText3"
+        android:hint="Add total price" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button" />
+
+
+</LinearLayout>

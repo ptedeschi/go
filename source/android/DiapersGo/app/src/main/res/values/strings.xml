@@ -5,4 +5,64 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="title_activity_add_deal">Add Deal</string>
+
+    <!-- Strings related to Diaper brands -->
+    <string name="diaper_brand_prompt">Choose a brand</string>
+
+    <string-array name="diaper_brand_array">
+        <item>Pampers</item>
+        <item>Huggies</item>
+        <!--<item>Huggies turma da mônica</item>-->
+        <item>Mamypoko</item>
+        <!--<item>Pompom</item>-->
+        <!--<item>Capricho</item>-->
+        <!--<item>Pom pom</item>-->
+        <!--<item>Cremer</item>-->
+        <!--<item>Dove</item>-->
+        <!--<item>First steps</item>-->
+        <!--<item>Plenitud</item>-->
+        <!--<item>Baby roger</item>-->
+        <!--<item>Incomfral</item>-->
+        <!--<item>Body rush</item>-->
+    </string-array>
+
+    <string name="diaper_model_prompt">Choose a model</string>
+
+    <string-array name="diaper_brand_pampers_array">
+        <item>Recém-Nascido</item>
+        <item>Premium Care</item>
+        <item>Pants</item>
+        <item>Confort Sec</item>
+        <item>Total Confort</item>
+    </string-array>
+
+    <string-array name="diaper_brand_huggies_array">
+        <item>UpGo</item>
+        <item>Little Swimmers</item>
+        <item>Tripla Proteção</item>
+        <item>Fralda Roupinha</item>
+        <item>Supreme Care - Meninos</item>
+        <item>Supreme Care - Meninas</item>
+        <item>Primeiros 100 dias</item>
+    </string-array>
+
+    <string-array name="diaper_brand_mamypoko_array">
+        <item>Fralda-Calça</item>
+        <item>Fralda-fita</item>
+    </string-array>
+
+    <!-- Strings related to Diaper sizes -->
+    <string name="diaper_size_prompt">Choose a size</string>
+
+    <string-array name="diaper_size_array">
+        <item>RN</item>
+        <item>XP</item>
+        <item>P</item>
+        <item>M</item>
+        <item>G</item>
+        <item>XG</item>
+        <item>XXG</item>
+    </string-array>
+
 </resources>
