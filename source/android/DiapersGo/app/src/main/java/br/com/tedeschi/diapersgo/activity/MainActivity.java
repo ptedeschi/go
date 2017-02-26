@@ -5,6 +5,7 @@ import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +50,18 @@ public class MainActivity extends AppCompatActivity
         Fabric.with(fabric);
 
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                refreshItems();
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -73,26 +85,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.deals_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        ApiInterface apiService =
-                ApiClient.getClient().create(ApiInterface.class);
-
-        Call<Deals> call = apiService.getTopRatedMovies(-22.8498085, -47.085443);
-        call.enqueue(new Callback<Deals>() {
-            @Override
-            public void onResponse(Call<Deals>call, Response<Deals> response) {
-                List<Deal> deals = response.body().getDeals();
-                recyclerView.setAdapter(new DealsAdapter(deals, R.layout.list_item_deal, getApplicationContext()));
-            }
-
-            @Override
-            public void onFailure(Call<Deals>call, Throwable t) {
-                // Log error here since request failed
-                Log.e(TAG, "onFailure: " + t.toString());
-            }
-        });
+        refreshItems();
     }
 
     @Override
@@ -150,5 +143,39 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    void refreshItems() {
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.deals_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<Deals> call = apiService.getTopRatedMovies(-22.8498085, -47.085443);
+        call.enqueue(new Callback<Deals>() {
+            @Override
+            public void onResponse(Call<Deals>call, Response<Deals> response) {
+                List<Deal> deals = response.body().getDeals();
+                recyclerView.setAdapter(new DealsAdapter(deals, R.layout.list_item_deal, getApplicationContext()));
+            }
+
+            @Override
+            public void onFailure(Call<Deals>call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, "onFailure: " + t.toString());
+            }
+        });
+
+        // Load complete
+        onItemsLoadComplete();
+    }
+
+    void onItemsLoadComplete() {
+        // Update the adapter and notify data set changed
+        // ...
+
+        // Stop refresh animation
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }
