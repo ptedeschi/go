@@ -16,10 +16,9 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
+        android:inputType="text"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/editTextVenue"
         android:layout_margin="5dp"/>
 
     <Spinner
@@ -68,7 +67,8 @@
         android:text="Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button" />
+        android:id="@+id/button"
+        android:onClick="selfDestruct" />
 
 
 </LinearLayout>
