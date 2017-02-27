@@ -22,10 +22,14 @@
         </activity>
 
         <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDPf2Nf0HnAIbUNKys-oyAY638SvTAmhDg"/>
+
+        <meta-data
             android:name="io.fabric.ApiKey"
             android:value="9b97bd99e0764ab4e91106d170669d19b6e72e25" />
 
-        <activity android:name=".activity.AddDealActivity"></activity>
+        <activity android:name=".activity.AddDealActivity" />
     </application>
 
 </manifest>

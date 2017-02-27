@@ -13,13 +13,12 @@
     tools:theme="@style/AppTheme">
 
 
-    <EditText
+    <fragment
+        android:id="@+id/place_autocomplete_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/editTextVenue"
-        android:layout_margin="5dp"/>
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        />
 
     <Spinner
         android:id="@+id/spinner_diaper_brand"
