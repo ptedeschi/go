@@ -21,19 +21,24 @@ GO
 CREATE PROCEDURE insertDeal @VenueSku nvarchar(40) = NULL, @VenueName nvarchar(40) = NULL, @VenueAddress nvarchar(40) = NULL, @VenueCity nvarchar(40) = NULL, @VenueState nvarchar(40) = NULL, @VenueCountry nvarchar(40) = NULL, @VenueLatitude float, @VenueLongitude float, @CustomerFirstName nvarchar(40) = NULL, @CustomerLastName nvarchar(40) = NULL, @CustomerEmail nvarchar(40) = NULL, @CustomerCountry nvarchar(40) = NULL, @ProductSku nvarchar(40) = NULL, @ProductName nvarchar(50) = NULL, @ProductBrand nvarchar(50) = NULL, @ProductModel nvarchar(50) = NULL, @ProductSize nvarchar(50) = NULL, @ProductQuantity int, @DealPrice decimal(12,2), @DealType nvarchar(50) = NULL, @DealComment nvarchar(50) = NULL
 AS
 BEGIN
-	DECLARE @ID_Deal_Venue int
-	DECLARE @ID_Deal_Customer int
-	DECLARE @ID_Deal_Product int
+	DECLARE @ID_Deal_Venue int = 0
+	DECLARE @ID_Deal_Customer int= 0
+	DECLARE @ID_Deal_Product int = 0
 
 	BEGIN TRANSACTION 
-		INSERT INTO Venue (Sku, Name, Address, City, State, Country, Latitude, Longitude) VALUES (@VenueSku, @VenueName, @VenueAddress, @VenueCity, @VenueState, @VenueCountry, @VenueLatitude, @VenueLongitude);
-		SET @ID_Deal_Venue = SCOPE_IDENTITY()    
+		SELECT @ID_Deal_Venue = Id FROM Venue WHERE Sku = @VenueSku
 		
-		IF @@ERROR <> 0
-			BEGIN      
-				ROLLBACK     
-				RETURN 
-			END   
+		IF @ID_Deal_Venue = 0
+		BEGIN
+			INSERT INTO Venue (Sku, Name, Address, City, State, Country, Latitude, Longitude) VALUES (@VenueSku, @VenueName, @VenueAddress, @VenueCity, @VenueState, @VenueCountry, @VenueLatitude, @VenueLongitude);
+			SET @ID_Deal_Venue = SCOPE_IDENTITY()    
+			
+			IF @@ERROR <> 0
+				BEGIN      
+					ROLLBACK     
+					RETURN 
+				END   
+		END
 
 		INSERT INTO Customer (FirstName, LastName, Email, Country) VALUES (@CustomerFirstName, @CustomerLastName, @CustomerEmail, @CustomerCountry);
 		SET @ID_Deal_Customer = SCOPE_IDENTITY()    
@@ -44,14 +49,19 @@ BEGIN
 				RETURN
 			END
 			
-		INSERT INTO Product (Sku, ProductName, Brand, Model, Size, Quantity) VALUES (@ProductSku, @ProductName, @ProductBrand, @ProductModel, @ProductSize,  @ProductQuantity);
-		SET @ID_Deal_Product = SCOPE_IDENTITY()
+		SELECT @ID_Deal_Product = Id FROM Product WHERE Sku = @ProductSku
 		
-		IF @@ERROR <> 0
-			BEGIN
-				ROLLBACK
-				RETURN
-			END
+		IF @ID_Deal_Product = 0
+		BEGIN
+			INSERT INTO Product (Sku, ProductName, Brand, Model, Size, Quantity) VALUES (@ProductSku, @ProductName, @ProductBrand, @ProductModel, @ProductSize,  @ProductQuantity);
+			SET @ID_Deal_Product = SCOPE_IDENTITY()
+			
+			IF @@ERROR <> 0
+				BEGIN
+					ROLLBACK
+					RETURN
+				END
+		END
 			
 		INSERT INTO Deal (CustomerId, VenueId, ProductId, Price, Type, Comment) VALUES (@ID_Deal_Customer, @ID_Deal_Venue, @ID_Deal_Product, @DealPrice, @DealType, @DealComment);
 		
