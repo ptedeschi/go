@@ -4,7 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Venue {
-
+    @SerializedName("Sku")
+    @Expose
+    private String sku;
     @SerializedName("Name")
     @Expose
     private String name;
@@ -29,6 +31,10 @@ public class Venue {
     @SerializedName("Distance")
     @Expose
     private Double distance;
+
+    public String getSku() {
+        return sku;
+    }
 
     public String getName() {
         return name;

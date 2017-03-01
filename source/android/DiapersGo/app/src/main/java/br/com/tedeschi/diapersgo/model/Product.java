@@ -4,7 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Product {
-
+    @SerializedName("Sku")
+    @Expose
+    private String sku;
     @SerializedName("Name")
     @Expose
     private String name;
@@ -17,6 +19,10 @@ public class Product {
     @SerializedName("Quantity")
     @Expose
     private Integer quantity;
+
+    public String getSku() {
+        return sku;
+    }
 
     public String getName() {
         return name;

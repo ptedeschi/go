@@ -12,13 +12,26 @@
     tools:context="br.com.tedeschi.diapersgo.activity.AddDealActivity"
     tools:theme="@style/AppTheme">
 
-
-    <fragment
-        android:id="@+id/place_autocomplete_fragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        />
+        android:layout_height="wrap_content" android:orientation="horizontal">
+        <EditText
+            android:id="@+id/edittext_venue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Estabelecimento"
+            android:layout_weight="1"/>
+
+        <Button
+            android:text="Search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonSearchVenue"
+            android:onClick="onButtonSearch" android:layout_weight="3"/>
+
+    </LinearLayout>
+
+
 
     <Spinner
         android:id="@+id/spinner_diaper_brand"

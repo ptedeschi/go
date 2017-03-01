@@ -1,5 +1,6 @@
 package br.com.tedeschi.diapersgo.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,11 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.foursquare.api.types.Venue;
+import com.foursquare.placepicker.PlacePicker;
 
 import br.com.tedeschi.diapersgo.R;
 import br.com.tedeschi.diapersgo.model.Deals;
@@ -24,12 +22,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddDealActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    PlaceAutocompleteFragment venueName;
+    private Venue mPlace;
+    EditText editTextVenueName;
     Spinner spinner_diaper_brand;
     Spinner spinner_diaper_model;
     Spinner spinner_diaper_size;
     private String TAG = "AddDealActivity";
-    private Place mPlace;
     private EditText mNumberOfDiapers;
     private EditText mDiaperPrice;
 
@@ -38,8 +36,7 @@ public class AddDealActivity extends AppCompatActivity implements AdapterView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_deal);
 
-        venueName = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        editTextVenueName = (EditText) findViewById(R.id.edittext_venue);
         spinner_diaper_brand = (Spinner) findViewById(R.id.spinner_diaper_brand);
          spinner_diaper_model = (Spinner) findViewById(R.id.spinner_diaper_model);
         spinner_diaper_size = (Spinner) findViewById(R.id.spinner_diaper_size);
@@ -47,31 +44,24 @@ public class AddDealActivity extends AppCompatActivity implements AdapterView.On
         mNumberOfDiapers = (EditText) findViewById(R.id.editText2);
         mDiaperPrice = (EditText) findViewById(R.id.editText3);
 
-        venueName.setHint("Estabelecimento");
 
-        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
-                .setCountry("BR").setTypeFilter(AutocompleteFilter.TYPE_FILTER_ESTABLISHMENT)
-                .build();
-
-        venueName.setFilter(typeFilter);
-
-        venueName.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName());
-
-                mPlace = place;
-            }
-
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
-            }
-        });
 
         spinner_diaper_brand.setOnItemSelectedListener(this);
+    }
+
+    private void pickPlace() {
+        Intent intent = new Intent(this, PlacePicker.class);
+        startActivityForResult(intent, 9001);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == PlacePicker.PLACE_PICKED_RESULT_CODE) {
+             mPlace = data.getParcelableExtra(PlacePicker.EXTRA_PLACE);
+            editTextVenueName.setText(mPlace.getName());
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -97,12 +87,23 @@ public class AddDealActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
+    public void onButtonSearch(View view) {
+        pickPlace();
+    }
+
     public void selfDestruct(View view) {
+
+        String brand = spinner_diaper_brand.getSelectedItem().toString();
+        String model = spinner_diaper_model.getSelectedItem().toString();
+        String size = spinner_diaper_size.getSelectedItem().toString();
+        String number = mNumberOfDiapers.getText().toString();
+        String skuTemp = brand+model+size+number;
+        String sku = Integer.toString(skuTemp.hashCode());
 
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<Deals> call = apiService.insert(mPlace.getId(), mPlace.getName().toString(), mPlace.getAddress().toString(), "", "", "", Double.toString(mPlace.getLatLng().latitude), Double.toString(mPlace.getLatLng().longitude), "CustomerFirstName", "CustomerLastName", "CustomerEmail", "CustomerCountry", spinner_diaper_brand.getSelectedItem().toString(), spinner_diaper_model.getSelectedItem().toString(), "ProductModel", spinner_diaper_size.getSelectedItem().toString(), mNumberOfDiapers.getText().toString(), mDiaperPrice.getText().toString(), "DealType", "DealComment");
+        Call<Deals> call = apiService.insert(mPlace.getId(), mPlace.getName(), mPlace.getLocation().getAddress(), mPlace.getLocation().getCity(), mPlace.getLocation().getState(), mPlace.getLocation().getCountry(), Float.toString(mPlace.getLocation().getLat()), Float.toString(mPlace.getLocation().getLng()), "CustomerFirstName", "CustomerLastName", "CustomerEmail", "CustomerCountry", sku, brand, model, "ProductModel", size, number, mDiaperPrice.getText().toString(), "DealType", "DealComment");
         call.enqueue(new Callback<Deals>() {
 
             /**

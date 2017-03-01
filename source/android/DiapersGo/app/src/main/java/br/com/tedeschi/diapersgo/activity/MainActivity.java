@@ -1,10 +1,15 @@
 package br.com.tedeschi.diapersgo.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +23,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.crashlytics.android.Crashlytics;
+import com.foursquare.placepicker.PlacePickerSdk;
+
 import io.fabric.sdk.android.Fabric;
 import java.util.List;
 
@@ -49,7 +57,49 @@ public class MainActivity extends AppCompatActivity
                 .build();
         Fabric.with(fabric);
 
+        PlacePickerSdk.with(new PlacePickerSdk.Builder(this)
+                .consumer("PBW1UBGFXFQYRHHQVIZO5WBWKC2KGVWOR415HB3MWN4JEUZO", "I4HQZYXNPQI5BH5LBCN04JZOLZBSF4FUSBJN0QUZAF33PBV3")
+                .imageLoader(new PlacePickerSdk.ImageLoader() {
+                    @Override
+                    public void loadImage(Context context, ImageView v, String url) {
+//                        Glide.with(context)
+//                                .load(url)
+//                                .placeholder(R.drawable.category_none)
+//                                .dontAnimate()
+//                                .into(v);
+                    }
+                })
+                .build());
+
         setContentView(R.layout.activity_main);
+
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        1);
+
+                // MY_PERMISSION_REQUEST_READ_FINE_LOCATION is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
